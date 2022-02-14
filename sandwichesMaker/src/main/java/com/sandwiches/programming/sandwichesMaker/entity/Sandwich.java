@@ -3,10 +3,9 @@ package com.sandwiches.programming.sandwichesMaker.entity;
 import com.sandwiches.programming.sandwichesMaker.type.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,7 +14,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity // 만약 @Entity에 빨간줄이 뜨면 entity는 규격에 맞춰서 property를 만들어주면 빨간줄 없어진다.
+@EntityListeners(AuditingEntityListener.class)
 public class Sandwich {
+
+    // @Entity 규칙
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
+
 
     // 주문번호
     private Integer orderNumber;
