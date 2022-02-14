@@ -1,15 +1,14 @@
 package com.sandwiches.programming.sandwichesMaker.controller;
 
+import com.sandwiches.programming.sandwichesMaker.dto.CreateSandwich;
 import com.sandwiches.programming.sandwichesMaker.service.SandwichService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,10 +26,10 @@ public class SMakerController {
         return Arrays.asList("eggmayo", "turkey", "italianBMT", "BLT");
     }
 
-    @GetMapping("/create-sandwiches")
-    public List<String> createSandwich(){
-        log.info("GET/create-sandwiches HTTP/1.1");
-        sandwichService.createSandwich();
+    @PostMapping("/create-sandwiches")
+    public List<String> createSandwich(@Valid @RequestBody CreateSandwich.Request request){
+        log.info("request : {}", request);
+        sandwichService.createSandwich(request);
         return Collections.singletonList("1");
     }
 }

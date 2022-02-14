@@ -1,5 +1,6 @@
 package com.sandwiches.programming.sandwichesMaker.service;
 
+import com.sandwiches.programming.sandwichesMaker.dto.CreateSandwich;
 import com.sandwiches.programming.sandwichesMaker.entity.Sandwich;
 import com.sandwiches.programming.sandwichesMaker.repository.SandwichRepository;
 import com.sandwiches.programming.sandwichesMaker.type.*;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class SandwichService {
 
     // entity 생성
     @Transactional
-    public void createSandwich(){
+    public void createSandwich(CreateSandwich.@Valid Request request){
         // 첫번째 주문
         Sandwich sandwich = Sandwich.builder()
                 .orderNumber(1)
