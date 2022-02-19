@@ -4,9 +4,7 @@ import com.sandwiches.programming.sandwichesMaker.entity.Sandwich;
 import com.sandwiches.programming.sandwichesMaker.type.*;
 import lombok.*;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public class CreateSandwich {
 
@@ -17,14 +15,19 @@ public class CreateSandwich {
     @Builder
     @ToString
     public static class Request{
-        @Size(min=1, max=100, message="orderNumber size must 1~100")
+        @NotNull
+        @Min(1)
+        @Max(100)
+        //@Size(min=1, max=100, message="orderNumber size must 1~100")
         private Integer orderNumber;
         @NotNull
         private SandwichMenu sandwichMenu;
         @NotNull
         private Integer sandwichSize;
         @NotNull
-        @Size(min=1, max=5, message="You must order sandwiches 1~5")
+        @Min(1)
+        @Max(2)
+        //@Size(min=1, max=5, message="You must order sandwiches 1~5")
         private Integer sandwichNum;
         @NotNull
         private Bread bread;
