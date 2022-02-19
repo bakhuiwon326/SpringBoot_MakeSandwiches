@@ -27,9 +27,8 @@ public class SMakerController {
     }
 
     @PostMapping("/create-sandwiches")
-    public List<String> createSandwich(@Valid @RequestBody CreateSandwich.Request request){
+    public CreateSandwich.Response createSandwich(@Valid @RequestBody CreateSandwich.Request request){
         log.info("request : {}", request);
-        sandwichService.createSandwich(request);
-        return Collections.singletonList("1");
+        return sandwichService.createSandwich(request);
     }
 }

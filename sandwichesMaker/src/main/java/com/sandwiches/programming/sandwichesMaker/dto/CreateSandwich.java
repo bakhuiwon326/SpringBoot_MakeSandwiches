@@ -1,5 +1,6 @@
 package com.sandwiches.programming.sandwichesMaker.dto;
 
+import com.sandwiches.programming.sandwichesMaker.entity.Sandwich;
 import com.sandwiches.programming.sandwichesMaker.type.*;
 import lombok.*;
 
@@ -45,10 +46,26 @@ public class CreateSandwich {
     public static class Response{
         private Integer orderNumber;
         private SandwichMenu sandwichMenu;
+        private Integer sandwichSize;
+        private Integer sandwichNum;
         private Bread bread;
         private Topping topping;
         private Cheese cheese;
         private Vegetable vegetable;
         private SandwichSource sandwichSource;
+
+        public static Response fromEntity(Sandwich sandwich){
+            return Response.builder()
+                    .orderNumber(sandwich.getOrderNumber())
+                    .sandwichMenu(sandwich.getSandwichMenu())
+                    .sandwichSize(sandwich.getSandwichSize())
+                    .sandwichNum(sandwich.getSandwichNum())
+                    .bread(sandwich.getBread())
+                    .topping(sandwich.getTopping())
+                    .cheese(sandwich.getCheese())
+                    .vegetable(sandwich.getVegetable())
+                    .sandwichSource(sandwich.getSandwichSource())
+                    .build();
+        }
     }
 }

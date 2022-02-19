@@ -29,22 +29,24 @@ public class SandwichService {
 
     // entity 생성
     @Transactional
-    public void createSandwich(CreateSandwich.@Valid Request request){
+    public CreateSandwich.Response createSandwich(CreateSandwich.@Valid Request request){
         validateCreateDeveloperRequest(request);
 
         // 첫번째 주문
         Sandwich sandwich = Sandwich.builder()
-                .orderNumber(1)
-                .sandwichMenu(SandwichMenu.EGGMAYO_SANDWICH)
-                .sandwichSize(15)
-                .sandwichNum(1)
-                .bread(Bread.FLAT_BREAD)
-                .topping(Topping.BACON)
-                .cheese(Cheese.AMERICAN_CHEESE)
-                .vegetable(Vegetable.OLIVE)
-                .sandwichSource(SandwichSource.RANCH)
+                .orderNumber(request.getOrderNumber())
+                .sandwichMenu(request.getSandwichMenu())
+                .sandwichSize(request.getSandwichSize())
+                .sandwichNum(request.getSandwichNum())
+                .bread(request.getBread())
+                .topping(request.getTopping())
+                .cheese(request.getCheese())
+                .vegetable(request.getVegetable())
+                .sandwichSource(request.getSandwichSource())
                 .build();
         sandwichRepository.save(sandwich);
+
+        return CreateSandwich.Response.fromEntity(sandwich);
     }
 
     private void validateCreateDeveloperRequest(CreateSandwich.Request request) {
