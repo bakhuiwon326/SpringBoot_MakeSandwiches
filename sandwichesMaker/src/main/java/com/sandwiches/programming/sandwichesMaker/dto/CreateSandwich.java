@@ -3,6 +3,7 @@ package com.sandwiches.programming.sandwichesMaker.dto;
 import com.sandwiches.programming.sandwichesMaker.type.*;
 import lombok.*;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -19,6 +20,11 @@ public class CreateSandwich {
         private Integer orderNumber;
         @NotNull
         private SandwichMenu sandwichMenu;
+        @NotNull
+        private Integer sandwichSize;
+        @NotNull
+        @Size(min=1, max=5, message="You must order sandwiches 1~5")
+        private Integer sandwichNum;
         @NotNull
         private Bread bread;
         @NotNull

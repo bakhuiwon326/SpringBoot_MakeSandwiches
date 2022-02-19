@@ -34,6 +34,12 @@ public class Sandwich {
     @Enumerated(EnumType.STRING)
     private SandwichMenu sandwichMenu;
 
+    // 샌드위치 크기
+    private Integer sandwichSize;
+
+    // 샌드위치 개수
+    private Integer sandwichNum;
+
     @Enumerated(EnumType.STRING)
     private Bread bread;
 
