@@ -1,6 +1,8 @@
 package com.sandwiches.programming.sandwichesMaker.controller;
 
 import com.sandwiches.programming.sandwichesMaker.dto.CreateSandwich;
+import com.sandwiches.programming.sandwichesMaker.dto.SandwichDetailDto;
+import com.sandwiches.programming.sandwichesMaker.dto.SandwichDto;
 import com.sandwiches.programming.sandwichesMaker.service.SandwichService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +23,17 @@ public class SMakerController {
     private final SandwichService sandwichService;
 
     @GetMapping("/sandwiches")
-    public List<String> getAllSandwiches(){
+    public List<SandwichDto> getAllSandwiches(){
         log.info("GET/sandwiches HTTP/1.1");
-        return Arrays.asList("eggmayo", "turkey", "italianBMT", "BLT");
+        return sandwichService.getAllSandwiches();
     }
 
+    @GetMapping("/sandwich/{orderNumber}")
+    public SandwichDetailDto getSpecificSandwich(@PathVariable Integer orderNumber){
+        log.info("GET /sandwich HTTP/1.1");
+        return sandwichService.getSandwichDetail(orderNumber);
+
+    }
     @PostMapping("/create-sandwiches")
     public CreateSandwich.Response createSandwich(@Valid @RequestBody CreateSandwich.Request request){
         log.info("request : {}", request);

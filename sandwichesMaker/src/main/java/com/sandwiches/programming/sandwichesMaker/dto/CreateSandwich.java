@@ -26,7 +26,7 @@ public class CreateSandwich {
         private Integer sandwichSize;
         @NotNull
         @Min(1)
-        @Max(2)
+        @Max(5)
         //@Size(min=1, max=5, message="You must order sandwiches 1~5")
         private Integer sandwichNum;
         @NotNull

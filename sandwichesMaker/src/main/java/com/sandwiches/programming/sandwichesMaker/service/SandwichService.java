@@ -1,6 +1,8 @@
 package com.sandwiches.programming.sandwichesMaker.service;
 
 import com.sandwiches.programming.sandwichesMaker.dto.CreateSandwich;
+import com.sandwiches.programming.sandwichesMaker.dto.SandwichDetailDto;
+import com.sandwiches.programming.sandwichesMaker.dto.SandwichDto;
 import com.sandwiches.programming.sandwichesMaker.entity.Sandwich;
 import com.sandwiches.programming.sandwichesMaker.exception.SMakerErrorCode;
 import com.sandwiches.programming.sandwichesMaker.exception.SMakerException;
@@ -11,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,4 +68,15 @@ public class SandwichService {
         if(sandwichOrderNumber.isPresent()) throw new SMakerException(SMakerErrorCode.DUPLICATED_ORDER_NUMBER);
     }
 
+    public List<SandwichDto> getAllSandwiches() {
+        return sandwichRepository.findAll()
+                .stream().map(SandwichDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public SandwichDetailDto getSandwichDetail(Integer orderNumber){
+        return sandwichRepository.findByOrderNumber(orderNumber)
+                .map(SandwichDetailDto::fromEntity).orElseThrow(() -> new SMakerException(SMakerErrorCode.INVALID_REQUEST));
+
+    }
 }
