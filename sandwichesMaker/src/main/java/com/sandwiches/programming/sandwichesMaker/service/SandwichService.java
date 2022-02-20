@@ -1,6 +1,7 @@
 package com.sandwiches.programming.sandwichesMaker.service;
 
 import com.sandwiches.programming.sandwichesMaker.dto.CreateSandwich;
+import com.sandwiches.programming.sandwichesMaker.dto.EditSandwich;
 import com.sandwiches.programming.sandwichesMaker.dto.SandwichDetailDto;
 import com.sandwiches.programming.sandwichesMaker.dto.SandwichDto;
 import com.sandwiches.programming.sandwichesMaker.entity.Sandwich;
@@ -34,7 +35,7 @@ public class SandwichService {
     // entity 생성
     @Transactional
     public CreateSandwich.Response createSandwich(CreateSandwich.@Valid Request request){
-        validateCreateDeveloperRequest(request);
+        validateCreateSandwichRequest(request);
 
         // 첫번째 주문
         Sandwich sandwich = Sandwich.builder()
@@ -53,9 +54,9 @@ public class SandwichService {
         return CreateSandwich.Response.fromEntity(sandwich);
     }
 
-    private void validateCreateDeveloperRequest(CreateSandwich.Request request) {
+    private void validateCreateSandwichRequest(CreateSandwich.Request request) {
         // business validation
-        // 샌드위치 사이즈를 잘못 주문했을 때
+        // 샌드위치 사이즈를 잘못 주문했을 때 - 15cm와 30cm만 존재
         if(request.getSandwichSize() != 15 && request.getSandwichSize() != 30 ){
             throw new SMakerException(SMakerErrorCode.SIZE_MISS);
         }
@@ -63,7 +64,7 @@ public class SandwichService {
         if(request.getSandwichNum() > 5){
             throw new SMakerException(SMakerErrorCode.NUM_OVER);
         }
-
+        // 주문번호가 중복이 있는지 없는지
         Optional<Sandwich> sandwichOrderNumber = sandwichRepository.findByOrderNumber(request.getOrderNumber());
         if(sandwichOrderNumber.isPresent()) throw new SMakerException(SMakerErrorCode.DUPLICATED_ORDER_NUMBER);
     }
@@ -78,5 +79,28 @@ public class SandwichService {
         return sandwichRepository.findByOrderNumber(orderNumber)
                 .map(SandwichDetailDto::fromEntity).orElseThrow(() -> new SMakerException(SMakerErrorCode.INVALID_REQUEST));
 
+    }
+
+    @Transactional
+    public SandwichDetailDto editSandwichOrder(Integer orderNumber, EditSandwich.Request request) {
+        validateEditSandwichRequest(request);
+        // 존재하는 주문번호인지 확인
+        Sandwich sandwich = sandwichRepository.findByOrderNumber(orderNumber).orElseThrow(
+                ()->new SMakerException(SMakerErrorCode.NO_ORDER_NUMBER)
+        );
+        sandwich.setSandwichSize(request.getSandwichSize());
+        sandwich.setBread(request.getBread());
+        sandwich.setTopping(request.getTopping());
+        sandwich.setCheese(request.getCheese());
+        sandwich.setVegetable(request.getVegetable());
+        sandwich.setSandwichSource(request.getSandwichSource());
+        return new SandwichDetailDto().fromEntity(sandwich);
+    }
+
+    private void validateEditSandwichRequest(EditSandwich.Request request) {
+        // 샌드위치 사이즈를 잘못 주문했을 때
+        if(request.getSandwichSize() != 15 && request.getSandwichSize() != 30 ){
+            throw new SMakerException(SMakerErrorCode.SIZE_MISS);
+        }
     }
 }

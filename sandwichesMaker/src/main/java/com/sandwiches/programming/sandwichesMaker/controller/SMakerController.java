@@ -1,6 +1,7 @@
 package com.sandwiches.programming.sandwichesMaker.controller;
 
 import com.sandwiches.programming.sandwichesMaker.dto.CreateSandwich;
+import com.sandwiches.programming.sandwichesMaker.dto.EditSandwich;
 import com.sandwiches.programming.sandwichesMaker.dto.SandwichDetailDto;
 import com.sandwiches.programming.sandwichesMaker.dto.SandwichDto;
 import com.sandwiches.programming.sandwichesMaker.service.SandwichService;
@@ -34,9 +35,15 @@ public class SMakerController {
         return sandwichService.getSandwichDetail(orderNumber);
 
     }
+
     @PostMapping("/create-sandwiches")
     public CreateSandwich.Response createSandwich(@Valid @RequestBody CreateSandwich.Request request){
         log.info("request : {}", request);
         return sandwichService.createSandwich(request);
+    }
+
+    @PutMapping("/sandwich/{orderNumber}")
+    public SandwichDetailDto editSandwichOrder(@PathVariable Integer orderNumber, @Valid @RequestBody EditSandwich.Request request){
+        return sandwichService.editSandwichOrder(orderNumber,request);
     }
 }
