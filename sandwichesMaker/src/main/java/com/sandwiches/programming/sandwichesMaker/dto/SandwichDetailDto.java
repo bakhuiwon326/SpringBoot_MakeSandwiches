@@ -1,5 +1,6 @@
 package com.sandwiches.programming.sandwichesMaker.dto;
 
+import code.StatusCode;
 import com.sandwiches.programming.sandwichesMaker.entity.Sandwich;
 import com.sandwiches.programming.sandwichesMaker.type.*;
 import lombok.*;
@@ -20,6 +21,7 @@ public class SandwichDetailDto {
     private SandwichMenu sandwichMenu;
     private Integer sandwichSize;
     private Integer sandwichNum;
+    private StatusCode statusCode;
     private Bread bread;
     private Topping topping;
     private Cheese cheese;
@@ -33,6 +35,7 @@ public class SandwichDetailDto {
                 .sandwichMenu(sandwich.getSandwichMenu())
                 .sandwichSize(sandwich.getSandwichSize())
                 .sandwichNum(sandwich.getSandwichNum())
+                .statusCode(sandwich.getStatusCode())
                 .bread(sandwich.getBread())
                 .topping(sandwich.getTopping())
                 .cheese(sandwich.getCheese())

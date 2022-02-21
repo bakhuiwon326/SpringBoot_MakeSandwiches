@@ -1,5 +1,6 @@
 package com.sandwiches.programming.sandwichesMaker.entity;
 
+import code.StatusCode;
 import com.sandwiches.programming.sandwichesMaker.type.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -29,6 +30,10 @@ public class Sandwich {
     // 주문시간
     @CreatedDate
     private LocalDateTime orderedTime;
+
+    // 주문 상태
+    @Enumerated(EnumType.STRING)
+    private StatusCode statusCode;
 
     // 주문 샌드위치
     @Enumerated(EnumType.STRING)

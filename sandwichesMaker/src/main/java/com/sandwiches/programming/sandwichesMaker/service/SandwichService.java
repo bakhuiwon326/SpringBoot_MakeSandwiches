@@ -1,12 +1,15 @@
 package com.sandwiches.programming.sandwichesMaker.service;
 
+import code.StatusCode;
 import com.sandwiches.programming.sandwichesMaker.dto.CreateSandwich;
 import com.sandwiches.programming.sandwichesMaker.dto.EditSandwich;
 import com.sandwiches.programming.sandwichesMaker.dto.SandwichDetailDto;
 import com.sandwiches.programming.sandwichesMaker.dto.SandwichDto;
+import com.sandwiches.programming.sandwichesMaker.entity.FinishedOrder;
 import com.sandwiches.programming.sandwichesMaker.entity.Sandwich;
 import com.sandwiches.programming.sandwichesMaker.exception.SMakerErrorCode;
 import com.sandwiches.programming.sandwichesMaker.exception.SMakerException;
+import com.sandwiches.programming.sandwichesMaker.repository.FinishedSandwichRepository;
 import com.sandwiches.programming.sandwichesMaker.repository.SandwichRepository;
 import com.sandwiches.programming.sandwichesMaker.type.*;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SandwichService {
     private final SandwichRepository sandwichRepository;
+    private final FinishedSandwichRepository finishedSandwichRepository;
+    @Transactional
+    public SandwichDetailDto deleteSandwichOrder(Integer orderNumber) {
+        // MAKING -> SUPPLIED
+        Sandwich sandwich = sandwichRepository.findByOrderNumber(orderNumber).orElseThrow(()->new SMakerException(SMakerErrorCode.NO_ORDER_NUMBER));
+        sandwich.setStatusCode(StatusCode.SUPPLIED);
+        // FnishedOrder에 저장
+        FinishedOrder finishedOrder = FinishedOrder.builder()
+                .orderNumber(orderNumber)
+                .sandwichMenu(sandwich.getSandwichMenu())
+                .sandwichSize(sandwich.getSandwichSize())
+                .sandwichNum(sandwich.getSandwichNum())
+                .build();
+        finishedSandwichRepository.save(finishedOrder);
+        return SandwichDetailDto.fromEntity(sandwich);
+    }
     /*
     이렇게 하는 것이 @Autowired나 @Inject보다 테스트할 때 용이하다.
     하지만, repository가 여러개일 때 일일이 추가하거나 수정하기 어려우니까,
@@ -40,6 +59,7 @@ public class SandwichService {
         // 첫번째 주문
         Sandwich sandwich = Sandwich.builder()
                 .orderNumber(request.getOrderNumber())
+                .statusCode(StatusCode.MAKING)
                 .sandwichMenu(request.getSandwichMenu())
                 .sandwichSize(request.getSandwichSize())
                 .sandwichNum(request.getSandwichNum())
@@ -69,8 +89,8 @@ public class SandwichService {
         if(sandwichOrderNumber.isPresent()) throw new SMakerException(SMakerErrorCode.DUPLICATED_ORDER_NUMBER);
     }
 
-    public List<SandwichDto> getAllSandwiches() {
-        return sandwichRepository.findAll()
+    public List<SandwichDto> getAllMakingSandwiches() {
+        return sandwichRepository.findSandwichesByStatusCodeEquals(StatusCode.MAKING)
                 .stream().map(SandwichDto::fromEntity)
                 .collect(Collectors.toList());
     }

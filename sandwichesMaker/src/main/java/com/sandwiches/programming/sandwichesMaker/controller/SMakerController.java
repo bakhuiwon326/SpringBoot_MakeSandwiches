@@ -4,6 +4,7 @@ import com.sandwiches.programming.sandwichesMaker.dto.CreateSandwich;
 import com.sandwiches.programming.sandwichesMaker.dto.EditSandwich;
 import com.sandwiches.programming.sandwichesMaker.dto.SandwichDetailDto;
 import com.sandwiches.programming.sandwichesMaker.dto.SandwichDto;
+import com.sandwiches.programming.sandwichesMaker.entity.Sandwich;
 import com.sandwiches.programming.sandwichesMaker.service.SandwichService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class SMakerController {
     @GetMapping("/sandwiches")
     public List<SandwichDto> getAllSandwiches(){
         log.info("GET/sandwiches HTTP/1.1");
-        return sandwichService.getAllSandwiches();
+        return sandwichService.getAllMakingSandwiches();
     }
 
     @GetMapping("/sandwich/{orderNumber}")
@@ -45,5 +46,10 @@ public class SMakerController {
     @PutMapping("/sandwich/{orderNumber}")
     public SandwichDetailDto editSandwichOrder(@PathVariable Integer orderNumber, @Valid @RequestBody EditSandwich.Request request){
         return sandwichService.editSandwichOrder(orderNumber,request);
+    }
+
+    @DeleteMapping("/sandwich/{orderNumber}")
+    public SandwichDetailDto deleteSandwichOrder(@PathVariable Integer orderNumber){
+        return sandwichService.deleteSandwichOrder(orderNumber);
     }
 }
